@@ -184,7 +184,7 @@
     });
     
     function updateCart(productId, quantity) {
-        fetch('/carrito/actualizar', {
+        fetch('/cart/update', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -211,7 +211,7 @@
     }
     
     function removeFromCart(productId) {
-        fetch(`/carrito/eliminar/${productId}`, {
+        fetch(`/cart/remove/${productId}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,25 +1,41 @@
 FROM php:8.2-apache
 
 RUN apt-get update && \
-	apt-get install -y unzip git zip libzip-dev && \
-	docker-php-ext-install pdo pdo_mysql zip
+    apt-get install -y unzip git zip libzip-dev libpng-dev curl && \
+    docker-php-ext-install pdo pdo_mysql zip && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Habilita mod_rewrite para Laravel
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
+
 RUN a2enmod rewrite
 
-COPY . /var/www/html
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
-# Cambia el DocumentRoot de Apache a /var/www/html/public
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/public|g' /etc/apache2/sites-available/000-default.conf
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf && \
+    sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf && \
+    sed -ri -e 's/AllowOverride None/AllowOverride All/g' /etc/apache2/apache2.conf
 
-# Cambia permisos para storage y bootstrap/cache
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# Configura el directorio de trabajo
 WORKDIR /var/www/html
 
-# Exponer el puerto 80
+COPY package.json package-lock.json* ./
+RUN npm ci
+
+COPY . .
+
+RUN npm run build
+
+RUN composer install --no-dev --optimize-autoloader --no-interaction
+
+RUN chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 775 storage bootstrap/cache
+
+COPY docker-entrypoint.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
 EXPOSE 80
 
-# Opcional: Instala Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+ENTRYPOINT ["docker-entrypoint.sh"]

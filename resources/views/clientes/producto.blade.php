@@ -1,6 +1,6 @@
 @extends('clientes.layouts.app')
 
-@section('title', $producto->nombre . ' - Ciclo Pérez')
+@section('title', $producto->name . ' - Ciclo Pérez')
 
 @section('content')
 <div class="product-detail-container">
@@ -10,36 +10,36 @@
             <span>/</span>
             <a href="{{ route('clientes.catalogo') }}">Catálogo</a>
             <span>/</span>
-            <span>{{ $producto->nombre }}</span>
+            <span>{{ $producto->name }}</span>
         </nav>
 
         <div class="product-detail-layout">
             <div class="product-detail-image">
-                <img src="{{ asset('assets/images/products/' . ($producto->imagen ?? 'default.png')) }}" 
-                     alt="{{ $producto->nombre }}"
+                <img src="{{ asset('assets/images/products/' . ($producto->image ?? 'default.png')) }}" 
+                     alt="{{ $producto->name }}"
                      onerror="this.src='{{ asset('favicon.svg') }}'">
             </div>
 
             <div class="product-detail-info">
-                <div class="product-detail-category">{{ $producto->categoria->nombre ?? 'Sin categoría' }}</div>
-                <h1 class="product-detail-name">{{ $producto->nombre }}</h1>
+                <div class="product-detail-category">{{ $producto->category->name ?? 'Uncategorized' }}</div>
+                <h1 class="product-detail-name">{{ $producto->name }}</h1>
                 
-                @if($producto->descripcion)
+                @if($producto->description)
                     <div class="product-detail-description">
-                        <p>{{ $producto->descripcion }}</p>
+                        <p>{{ $producto->description }}</p>
                     </div>
                 @endif
 
                 <div class="product-detail-price">
                     <span class="price-label">Precio:</span>
-                    <span class="price-amount">₡{{ number_format($producto->precio_venta, 0, ',', '.') }}</span>
+                    <span class="price-amount">₡{{ number_format($producto->sale_price, 0, ',', '.') }}</span>
                 </div>
 
                 <div class="product-detail-stock">
-                    @if($producto->stock_actual > 0)
+                    @if($producto->stock_current > 0)
                         <span class="stock-available">
                             <i class="fas fa-check-circle"></i>
-                            En stock ({{ $producto->stock_actual }} disponibles)
+                            En stock ({{ $producto->stock_current }} disponibles)
                         </span>
                     @else
                         <span class="stock-unavailable">
@@ -49,7 +49,7 @@
                     @endif
                 </div>
 
-                @if($producto->stock_actual > 0)
+                @if($producto->stock_current > 0)
                     <div class="product-detail-actions">
                         <div class="quantity-selector">
                             <label>Cantidad:</label>
@@ -57,17 +57,17 @@
                                 <button class="quantity-btn" id="decrease-qty">
                                     <i class="fas fa-minus"></i>
                                 </button>
-                                <input type="number" id="product-quantity" value="1" min="1" max="{{ $producto->stock_actual }}">
+                                <input type="number" id="product-quantity" value="1" min="1" max="{{ $producto->stock_current }}">
                                 <button class="quantity-btn" id="increase-qty">
                                     <i class="fas fa-plus"></i>
                                 </button>
                             </div>
                         </div>
                         <button class="btn btn-primary btn-lg add-to-cart-btn" 
-                                data-product-id="{{ $producto->producto_id }}"
-                                data-product-name="{{ $producto->nombre }}"
-                                data-product-price="{{ $producto->precio_venta }}"
-                                data-product-stock="{{ $producto->stock_actual }}">
+                                data-product-id="{{ $producto->product_id }}"
+                                data-product-name="{{ $producto->name }}"
+                                data-product-price="{{ $producto->sale_price }}"
+                                data-product-stock="{{ $producto->stock_current }}">
                             <i class="fas fa-cart-plus"></i>
                             Agregar al Carrito
                         </button>
@@ -83,22 +83,22 @@
                     @foreach($productosRelacionados as $relacionado)
                         <div class="product-card">
                             <div class="product-image">
-                                <a href="{{ route('clientes.producto', $relacionado->producto_id) }}">
-                                    <img src="{{ asset('assets/images/products/' . ($relacionado->imagen ?? 'default.png')) }}" 
-                                         alt="{{ $relacionado->nombre }}"
+                                <a href="{{ route('clientes.producto', $relacionado->product_id) }}">
+                                    <img src="{{ asset('assets/images/products/' . ($relacionado->image ?? 'default.png')) }}" 
+                                         alt="{{ $relacionado->name }}"
                                          onerror="this.src='{{ asset('favicon.svg') }}'">
                                 </a>
                             </div>
                             <div class="product-info">
-                                <div class="product-category">{{ $relacionado->categoria->nombre ?? 'Sin categoría' }}</div>
+                                <div class="product-category">{{ $relacionado->category->name ?? 'Uncategorized' }}</div>
                                 <h3 class="product-name">
-                                    <a href="{{ route('clientes.producto', $relacionado->producto_id) }}">
-                                        {{ $relacionado->nombre }}
+                                    <a href="{{ route('clientes.producto', $relacionado->product_id) }}">
+                                        {{ $relacionado->name }}
                                     </a>
                                 </h3>
                                 <div class="product-footer">
-                                    <div class="product-price">₡{{ number_format($relacionado->precio_venta, 0, ',', '.') }}</div>
-                                    <a href="{{ route('clientes.producto', $relacionado->producto_id) }}" class="btn btn-primary btn-sm">
+                                    <div class="product-price">₡{{ number_format($relacionado->sale_price, 0, ',', '.') }}</div>
+                                    <a href="{{ route('clientes.producto', $relacionado->product_id) }}" class="btn btn-primary btn-sm">
                                         Ver Detalles
                                     </a>
                                 </div>
@@ -116,7 +116,7 @@
 <script>
     // Control de cantidad
     let quantity = 1;
-    const maxQuantity = {{ $producto->stock_actual }};
+    const maxQuantity = {{ $producto->stock_current }};
     
     document.getElementById('decrease-qty')?.addEventListener('click', function() {
         if (quantity > 1) {

@@ -14,7 +14,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
     
-    <link rel="stylesheet" href="{{ asset('estilos.php') }}">
+    @vite(['resources/js/app.js'])
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -161,15 +161,15 @@
                                 <tr>
                                     <td>
                                         <div class="product-info">
-                                            <img src="{{ asset('assets/images/products/' . ($product->imagen ?? 'default.png')) }}" 
-                                                 alt="{{ $product->nombre }}" class="product-thumb">
-                                            <span>{{ $product->nombre }}</span>
+                                            <img src="{{ asset('assets/images/products/' . ($product->image ?? 'default.png')) }}" 
+                                                 alt="{{ $product->name }}" class="product-thumb">
+                                            <span>{{ $product->name }}</span>
                                         </div>
                                     </td>
                                     <td>
-                                        <span class="stock-badge danger">{{ $product->stock_actual }}</span>
+                                        <span class="stock-badge danger">{{ $product->stock_current }}</span>
                                     </td>
-                                    <td>{{ $product->stock_minimo }}</td>
+                                    <td>{{ $product->stock_minimum }}</td>
                                     <td>
                                         <span class="status-badge warning">Stock Bajo</span>
                                     </td>
@@ -285,7 +285,7 @@
         </div>
     </main>
 
-    <script src="{{ asset('js/dashboard.js') }}"></script>
+    @vite(['resources/js/dashboard.js'])
 </body>
 
 </html>
