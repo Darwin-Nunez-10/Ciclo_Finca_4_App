@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('Titulo pagina'); ?>
     Proveedores
 <?php $__env->stopSection(); ?>
@@ -367,7 +369,7 @@
 <?php $__env->stopSection(); ?>
 
 <?php $__env->startPush('styles'); ?>
-    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/suppliers/supplier-entry.css']); ?>
+    <link rel="stylesheet" href="<?php echo e(asset('css/suppliers/supplier.css')); ?>">
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('suppliers', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /var/www/html/resources/views/suppliers/index.blade.php ENDPATH**/ ?>

@@ -68,11 +68,11 @@
                     <div class="filters-grid">
                         <div class="filter-group">
                             <label for="category">Categoría</label>
-                            <select id="category" name="category_id">
+                            <select id="category" name="categoria_id">
                                 <option value="">Todas las categorías</option>
-                                <?php $__currentLoopData = $categories; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($category->category_id); ?>" <?php if(request('category_id')==='<?php echo e($category->category_id); ?>'): echo 'selected'; endif; ?>>
-                                        <?php echo e($category->name); ?>
+                                <?php $__currentLoopData = $categorias; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoria): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($categoria->categoria_id); ?>" <?php if(request('categoria_id')==='<?php echo e($categoria->categoria_id); ?>'): echo 'selected'; endif; ?>>
+                                        <?php echo e($categoria->nombre); ?>
 
                                     </option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -89,12 +89,12 @@
                         </div>
                         <div class="filter-group">
                             <label for="status">Estado del Producto</label>
-                            <select id="status" name="status">
+                            <select id="status" name="estado">
                                 <option value="">Todos los estados</option>
-                                <option value="active" <?php if(request('status')==='active' ): echo 'selected'; endif; ?>>Activo</option>
-                                <option value="inactive" <?php if(request('status')==='inactive' ): echo 'selected'; endif; ?>>Inactivo</option>
-                                <option value="out_of_stock" <?php if(request('status')==='out_of_stock' ): echo 'selected'; endif; ?>>Agotado</option>
-                                <option value="discontinued" <?php if(request('status')==='discontinued' ): echo 'selected'; endif; ?>>Descontinuado</option>
+                                <option value="activo" <?php if(request('estado')==='activo' ): echo 'selected'; endif; ?>>Activo</option>
+                                <option value="inactivo" <?php if(request('estado')==='inactivo' ): echo 'selected'; endif; ?>>Inactivo</option>
+                                <option value="agotado" <?php if(request('estado')==='agotado' ): echo 'selected'; endif; ?>>Agotado</option>
+                                <option value="descontinuado" <?php if(request('estado')==='descontinuado' ): echo 'selected'; endif; ?>>Descontinuado</option>
                             </select>
                         </div>
                         <div class="filter-group">
@@ -124,7 +124,7 @@
                 </div>
                 <div class="products-header">
                     <div class="products-count">
-                        <span><?php echo e($paginator->total()); ?> products</span>
+                        <span><?php echo e($productos->total()); ?> productos</span>
                     </div>
                     <div class="view-options">
                         <button class="view-btn active" data-view="table">
@@ -150,38 +150,38 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $__currentLoopData = $paginator; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php $__currentLoopData = $productos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $producto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                             <tr>
                                 <td class="product-cell">
-                                    <?php if($product->image): ?>
-                                        <img src="<?php echo e(asset('assets/images/products/' . $product->image)); ?>" alt="<?php echo e($product->name); ?>">
+                                    <?php if($producto->imagen): ?>
+                                        <img src="<?php echo e(asset('assets/images/products/' . $producto->imagen)); ?>" alt="<?php echo e($producto->nombre); ?>">
                                     <?php else: ?>
-                                        <img src="<?php echo e(asset('assets/images/products/default.png')); ?>" alt="<?php echo e($product->name); ?>">
+                                        <img src="<?php echo e(asset('assets/images/products/default.png')); ?>" alt="<?php echo e($producto->nombre); ?>">
                                     <?php endif; ?>
                                     <div class="product-info">
-                                        <h4><?php echo e($product->name); ?></h4>
-                                        <span class="sku">SKU: <?php echo e('BK-' . str_pad($product->product_id, 3, '0', STR_PAD_LEFT)); ?></span>
+                                        <h4><?php echo e($producto->nombre); ?></h4>
+                                        <span class="sku">SKU: <?php echo e($producto->sku); ?></span>
                                     </div>
                                 </td>
-                                <td><?php echo e($product->category->name); ?></td>
+                                <td><?php echo e($producto->categoria->nombre); ?></td>
                                 <td>
-                                    <span class="stock-badge <?php echo e($product->stock_current > 10 ? 'success' : ($product->stock_current > 0 ? 'warning' : 'danger')); ?>"><?php echo e($product->stock_current); ?></span>
+                                    <span class="stock-badge <?php echo e($producto->stock_status_class); ?>"><?php echo e($producto->stock_actual); ?></span>
                                 </td>
-                                <td>₡<?php echo e(number_format($product->sale_price, 0, ',', '.')); ?></td>
+                                <td>₡<?php echo e(number_format($producto->precio_venta, 0, ',', '.')); ?></td>
                                 <td>
-                                    <span class="status-badge <?php echo e($product->status === 'active' ? 'success' : ($product->status === 'inactive' ? 'warning' : 'secondary')); ?>"><?php echo e($product->status === 'active' ? 'Activo' : ($product->status === 'inactive' ? 'Inactivo' : ($product->status === 'out_of_stock' ? 'Agotado' : 'Descontinuado'))); ?></span>
+                                    <span class="status-badge <?php echo e($producto->status_class); ?>"><?php echo e($producto->estado); ?></span>
                                 </td>
                                 <td>
                                     <div class="actions-container">
-                                        <button class="action-btn view view-details-btn" data-product-id="<?php echo e($product->product_id); ?>" title="View details">
+                                        <button class="action-btn view view-details-btn" data-product-id="<?php echo e($producto->producto_id); ?>" title="Ver detalles">
                                             <i class="fas fa-eye"></i>
                                         </button>
-                                        <button class="action-btn edit edit-btn" data-product-id="<?php echo e($product->product_id); ?>" title="Edit product">
+                                        <button class="action-btn edit edit-btn" data-product-id="<?php echo e($producto->producto_id); ?>" title="Editar producto">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                         <button class="action-btn delete" data-action="delete"
-                                            data-product-id="<?php echo e($product->product_id); ?>"
-                                            data-product-name="<?php echo e($product->name); ?>" title="Delete product">
+                                            data-product-id="<?php echo e($producto->producto_id); ?>"
+                                            data-product-name="<?php echo e($producto->nombre); ?>" title="Eliminar producto">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </div>
@@ -195,52 +195,52 @@
                 <!-- Vista de cuadrícula -->
                 <div class="products-table grid-view">
                     <div class="products-grid">
-                        <?php $__currentLoopData = $paginator; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $product): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <?php $__currentLoopData = $productos; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $producto): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="product-card">
                             <div class="product-card-header">
-                                <?php if($product->image): ?>
-                                    <img src="<?php echo e(asset('assets/images/products/' . $product->image)); ?>" alt="<?php echo e($product->name); ?>" class="product-card-image">
+                                <?php if($producto->imagen): ?>
+                                    <img src="<?php echo e(asset('assets/images/products/' . $producto->imagen)); ?>" alt="<?php echo e($producto->nombre); ?>" class="product-card-image">
                                 <?php else: ?>
-                                    <img src="<?php echo e(asset('assets/images/products/default.png')); ?>" alt="<?php echo e($product->name); ?>" class="product-card-image">
+                                    <img src="<?php echo e(asset('assets/images/products/default.png')); ?>" alt="<?php echo e($producto->nombre); ?>" class="product-card-image">
                                 <?php endif; ?>
                                 <div class="product-card-info">
-                                    <h4><?php echo e($product->name); ?></h4>
-                                    <span class="sku">SKU: <?php echo e('BK-' . str_pad($product->product_id, 3, '0', STR_PAD_LEFT)); ?></span>
+                                    <h4><?php echo e($producto->nombre); ?></h4>
+                                    <span class="sku">SKU: <?php echo e($producto->sku); ?></span>
                                 </div>
                             </div>
                             <div class="product-card-details">
                                 <div class="product-card-detail">
                                     <span class="product-card-detail-label">Categoría</span>
-                                    <span class="product-card-detail-value"><?php echo e($product->category->name); ?></span>
+                                    <span class="product-card-detail-value"><?php echo e($producto->categoria->nombre); ?></span>
                                 </div>
                                 <div class="product-card-detail">
                                     <span class="product-card-detail-label">Stock</span>
                                     <span class="product-card-detail-value">
-                                        <span class="stock-badge <?php echo e($product->stock_current > 10 ? 'success' : ($product->stock_current > 0 ? 'warning' : 'danger')); ?>"><?php echo e($product->stock_current); ?></span>
+                                        <span class="stock-badge <?php echo e($producto->stock_status_class); ?>"><?php echo e($producto->stock_actual); ?></span>
                                     </span>
                                 </div>
                                 <div class="product-card-detail">
                                     <span class="product-card-detail-label">Precio</span>
-                                    <span class="product-card-detail-value">₡<?php echo e(number_format($product->sale_price, 0, ',', '.')); ?></span>
+                                    <span class="product-card-detail-value">₡<?php echo e(number_format($producto->precio_venta, 0, ',', '.')); ?></span>
                                 </div>
                                 <div class="product-card-detail">
                                     <span class="product-card-detail-label">Estado</span>
                                     <span class="product-card-detail-value">
-                                        <span class="status-badge <?php echo e($product->status === 'active' ? 'success' : ($product->status === 'inactive' ? 'warning' : 'secondary')); ?>"><?php echo e($product->status === 'active' ? 'Activo' : ($product->status === 'inactive' ? 'Inactivo' : ($product->status === 'out_of_stock' ? 'Agotado' : 'Descontinuado'))); ?></span>
+                                        <span class="status-badge <?php echo e($producto->status_class); ?>"><?php echo e($producto->estado); ?></span>
                                     </span>
                                 </div>
                             </div>
                             <div class="product-card-actions">
                                 <div class="actions-container">
-                                    <button class="action-btn view view-details-btn" data-product-id="<?php echo e($product->product_id); ?>" title="View details">
+                                    <button class="action-btn view view-details-btn" data-product-id="<?php echo e($producto->producto_id); ?>" title="Ver detalles">
                                         <i class="fas fa-eye"></i>
                                     </button>
-                                    <button class="action-btn edit edit-btn" data-product-id="<?php echo e($product->product_id); ?>" title="Edit product">
+                                    <button class="action-btn edit edit-btn" data-product-id="<?php echo e($producto->producto_id); ?>" title="Editar producto">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                     <button class="action-btn delete" data-action="delete"
-                                        data-product-id="<?php echo e($product->product_id); ?>"
-                                        data-product-name="<?php echo e($product->name); ?>" title="Delete product">
+                                        data-product-id="<?php echo e($producto->producto_id); ?>"
+                                        data-product-name="<?php echo e($producto->nombre); ?>" title="Eliminar producto">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </div>
@@ -252,14 +252,14 @@
 
                                 <?php if (isset($component)) { $__componentOriginal41032d87daf360242eb88dbda6c75ed1 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginal41032d87daf360242eb88dbda6c75ed1 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.pagination','data' => ['paginator' => $paginator,'label' => 'inventory']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.pagination','data' => ['paginator' => $productos,'label' => 'de inventario']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
 <?php $component->withName('pagination'); ?>
 <?php if ($component->shouldRender()): ?>
 <?php $__env->startComponent($component->resolveView(), $component->data()); ?>
 <?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
 <?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
 <?php endif; ?>
-<?php $component->withAttributes(['paginator' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($paginator),'label' => 'inventory']); ?>
+<?php $component->withAttributes(['paginator' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($productos),'label' => 'de inventario']); ?>
 <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal41032d87daf360242eb88dbda6c75ed1)): ?>
@@ -285,38 +285,38 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="new-product-form" action="<?php echo e(route('products.store')); ?>" method="POST" enctype="multipart/form-data">
+                <form id="new-product-form" action="<?php echo e(route('products.store')); ?>" method="POST">
                     <?php echo csrf_field(); ?>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="new-name">Nombre del Producto *</label>
-                            <input type="text" id="new-name" name="name" placeholder="e.g., Bike tire" required>
+                            <input type="text" id="new-name" name="nombre" placeholder="Ej: Llanta para bicicleta" required>
                         </div>
                         <div class="form-group">
                             <label for="new-description">Descripción</label>
-                            <textarea id="new-description" name="description" rows="3" placeholder="e.g., High quality off-road tire"></textarea>
+                            <textarea id="new-description" name="descripcion" rows="3" placeholder="Ej: Llanta de alta calidad para todo terreno"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="new-image">Imagen del Producto </label>
-                        <input type="file" id="new-image" name="image" accept="image/*">
+                        <input type="file" id="new-image" name="imagen" accept="image/*">
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="new-category">Categoría *</label>
-                            <select id="new-category" name="category_id" required>
+                            <select id="new-category" name="categoria_id" required>
                                 <option value="">Seleccionar categoría</option>
-                                <?php $__currentLoopData = \App\Models\Category::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($category->category_id); ?>"><?php echo e($category->name); ?></option>
+                                <?php $__currentLoopData = \App\Models\Categoria::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoria): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($categoria->categoria_id); ?>"><?php echo e($categoria->nombre); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="new-provider">Proveedor *</label>
-                            <select id="new-provider" name="supplier_id" required>
+                            <select id="new-provider" name="proveedor_id" required>
                                 <option value="">Seleccionar proveedor</option>
-                                <?php $__currentLoopData = \App\Models\Supplier::where('status', 'active')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $supplier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                <option value="<?php echo e($supplier->supplier_id); ?>"><?php echo e($supplier->name); ?></option>
+                                <?php $__currentLoopData = \App\Models\Proveedor::where('estado', 'activo')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $proveedor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                <option value="<?php echo e($proveedor->proveedor_id); ?>"><?php echo e($proveedor->nombre); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
@@ -324,30 +324,30 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="new-price-buy">Precio de Compra (₡) *</label>
-                            <input type="number" id="new-price-buy" name="purchase_price" min="0" step="0.01" placeholder="e.g., 10000" required>
+                            <input type="number" id="new-price-buy" name="precio_compra" min="0" step="0.01" placeholder="Ej: 10000" required>
                         </div>
                         <div class="form-group">
                             <label for="new-price-sell">Precio de Venta (₡) *</label>
-                            <input type="number" id="new-price-sell" name="sale_price" min="0" step="0.01" placeholder="e.g., 15000" required>
+                            <input type="number" id="new-price-sell" name="precio_venta" min="0" step="0.01" placeholder="Ej: 15000" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="new-stock">Stock Actual *</label>
-                            <input type="number" id="new-stock" name="stock_current" min="0" placeholder="e.g., 50" required>
+                            <input type="number" id="new-stock" name="stock_actual" min="0" placeholder="Ej: 50" required>
                         </div>
                         <div class="form-group">
                             <label for="new-stock-min">Stock Mínimo *</label>
-                            <input type="number" id="new-stock-min" name="stock_minimum" min="0" placeholder="e.g., 10" required>
+                            <input type="number" id="new-stock-min" name="stock_minimo" min="0" placeholder="Ej: 10" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="new-status">Estado *</label>
-                        <select id="new-status" name="status" required>
-                            <option value="active">Activo</option>
-                            <option value="inactive">Inactivo</option>
-                            <option value="out_of_stock">Agotado</option>
-                            <option value="discontinued">Descontinuado</option>
+                        <select id="new-status" name="estado" required>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                            <option value="agotado">Agotado</option>
+                            <option value="descontinuado">Descontinuado</option>
                         </select>
                     </div>
                 </form>
@@ -383,34 +383,34 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="edit-name">Nombre del Producto *</label>
-                            <input type="text" id="edit-name" name="name" required>
+                            <input type="text" id="edit-name" name="nombre" required>
                         </div>
                         <div class="form-group">
                             <label for="edit-description">Descripción</label>
-                            <textarea id="edit-description" name="description" rows="3"></textarea>
+                            <textarea id="edit-description" name="descripcion" rows="3"></textarea>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="edit-image">Imagen del Producto </label>
-                        <input type="file" id="edit-image" name="image" accept="image/*">
+                        <input type="file" id="edit-image" name="imagen" accept="image/*">
                         <div id="current-image-preview" style="margin-top: 10px;"></div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="edit-category">Categoría *</label>
-                            <select id="edit-category" name="category_id" required>
+                            <select id="edit-category" name="categoria_id" required>
                                 <option value="">Seleccionar categoría</option>
-                                <?php $__currentLoopData = \App\Models\Category::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $category): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($category->category_id); ?>"><?php echo e($category->name); ?></option>
+                                <?php $__currentLoopData = \App\Models\Categoria::all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $categoria): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($categoria->categoria_id); ?>"><?php echo e($categoria->nombre); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
                         <div class="form-group">
                             <label for="edit-provider">Proveedor *</label>
-                            <select id="edit-provider" name="supplier_id" required>
+                            <select id="edit-provider" name="proveedor_id" required>
                                 <option value="">Seleccionar proveedor</option>
-                                <?php $__currentLoopData = \App\Models\Supplier::where('status', 'active')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $supplier): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($supplier->supplier_id); ?>"><?php echo e($supplier->name); ?></option>
+                                <?php $__currentLoopData = \App\Models\Proveedor::where('estado', 'activo')->get(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $proveedor): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($proveedor->proveedor_id); ?>"><?php echo e($proveedor->nombre); ?></option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
                         </div>
@@ -418,30 +418,30 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label for="edit-price-buy">Precio de Compra (₡) *</label>
-                            <input type="number" id="edit-price-buy" name="purchase_price" min="0" step="0.01" required>
+                            <input type="number" id="edit-price-buy" name="precio_compra" min="0" step="0.01" required>
                         </div>
                         <div class="form-group">
                             <label for="edit-price-sell">Precio de Venta (₡) *</label>
-                            <input type="number" id="edit-price-sell" name="sale_price" min="0" step="0.01" required>
+                            <input type="number" id="edit-price-sell" name="precio_venta" min="0" step="0.01" required>
                         </div>
                     </div>
                     <div class="form-row">
                         <div class="form-group">
                             <label for="edit-stock">Stock Actual *</label>
-                            <input type="number" id="edit-stock" name="stock_current" min="0" required>
+                            <input type="number" id="edit-stock" name="stock_actual" min="0" required>
                         </div>
                         <div class="form-group">
                             <label for="edit-stock-min">Stock Mínimo *</label>
-                            <input type="number" id="edit-stock-min" name="stock_minimum" min="0" required>
+                            <input type="number" id="edit-stock-min" name="stock_minimo" min="0" required>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="edit-status">Estado *</label>
-                        <select id="edit-status" name="status" required>
-                            <option value="active">Activo</option>
-                            <option value="inactive">Inactivo</option>
-                            <option value="out_of_stock">Agotado</option>
-                            <option value="discontinued">Descontinuado</option>
+                        <select id="edit-status" name="estado" required>
+                            <option value="activo">Activo</option>
+                            <option value="inactivo">Inactivo</option>
+                            <option value="agotado">Agotado</option>
+                            <option value="descontinuado">Descontinuado</option>
                         </select>
                     </div>
                 </form>
@@ -683,4 +683,4 @@
 
 </html>
 
-</html><?php /**PATH /var/www/html/resources/views/products/inventory.blade.php ENDPATH**/ ?>
+</html><?php /**PATH /var/www/html/resources/views/inventory.blade.php ENDPATH**/ ?>

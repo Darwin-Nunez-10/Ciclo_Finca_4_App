@@ -14,9 +14,10 @@
     <link rel="apple-touch-icon" sizes="180x180" href="<?php echo e(asset('apple-touch-icon.png')); ?>">
     <link rel="icon" type="image/x-icon" href="<?php echo e(asset('favicon.ico')); ?>">
 
-    <?php echo app('Illuminate\Foundation\Vite')(['resources/js/app.js']); ?>
+    <!-- Per-view styles -->
     <?php echo $__env->yieldPushContent('styles'); ?>
 
+    <!-- Fonts and icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
@@ -33,7 +34,7 @@
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <?php echo app('Illuminate\Foundation\Vite')(['resources/js/suppliers.js']); ?>
+    <script src="<?php echo e(asset('js/suppliers.js')); ?>"></script>
     <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
 

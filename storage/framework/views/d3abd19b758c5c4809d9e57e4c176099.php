@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('Titulo pagina', 'Iniciar Sesión'); ?>
 
 <?php $__env->startSection('contenido'); ?>
@@ -125,8 +127,12 @@
     </div>
 <?php $__env->stopSection(); ?>
 
+<?php $__env->startPush('styles'); ?>
+    <link rel="stylesheet" href="<?php echo e(asset('estilos.php')); ?>">
+<?php $__env->stopPush(); ?>
+
 <?php $__env->startPush('scripts'); ?>
-    <?php echo app('Illuminate\Foundation\Vite')(['resources/js/usuarios.js']); ?>
+    <script src="<?php echo e(asset('js/usuarios.js')); ?>"></script>
 <?php $__env->stopPush(); ?>
 
 <?php echo $__env->make('usuarios', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH /var/www/html/resources/views/usuarios/login.blade.php ENDPATH**/ ?>

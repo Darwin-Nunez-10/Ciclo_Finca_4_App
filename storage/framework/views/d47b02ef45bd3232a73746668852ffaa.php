@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title', 'Carrito de Compras - Ciclo Pérez'); ?>
 
 <?php $__env->startSection('content'); ?>

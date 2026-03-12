@@ -1,3 +1,5 @@
+
+
 <?php $__env->startSection('title', 'Catálogo - Ciclo Pérez'); ?>
 
 <?php $__env->startSection('content'); ?>
